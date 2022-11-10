@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--加载jdbc.properties-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!-- 连接数据库的用户名 -->
+        <property name="username" value="${jdbc.user}"/>
+        <!-- 连接数据库的密码 -->
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 目标数据库的 URL 地址 -->
+        <property name="url" value="${jdbc.url}"/>
+        <!-- 数据库驱动全类名 -->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+    </bean>
+    <!--配置sqlSessionFactoryBean整合mybatis-->
+    <bean id="配置sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--指定Mybatis全局配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--指定mapper.xml配置文件位置-->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+        <!--装配数据源-->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--配置MapperScannerConfigure来扫描Mapper接口所在的包-->
+    <bean id="mapperScannerConfigure" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.tedu.java.mapper"></property>
+    </bean>
+
+</beans>
