@@ -2,6 +2,7 @@ package com.tedu.java;
 
 import com.tedu.java.entity.Admin;
 import com.tedu.java.mapper.AdminMapper;
+import com.tedu.java.service.api.AdminService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,13 +23,16 @@ import java.sql.SQLException;
  * @描述：在类上标记必要的注解，Spring整合Junit
  **/
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-persist-mybatis.xml"})
+@ContextConfiguration(locations = {"classpath:spring-persist-mybatis.xml","classpath:spring-persist-tx.xml"})
 public class CrowdTest {
     @Autowired
     private DataSource dataSource;
 
     @Autowired
     private AdminMapper adminMapper;
+
+    @Autowired
+    private AdminService adminService;
     @Test
     public void logTest(){
         //1.获取Logger对象,这里传入的Class对象就是当前打印日志的类
@@ -60,5 +64,11 @@ public class CrowdTest {
     public void testConnection() throws SQLException {
         Connection connection = dataSource.getConnection();
         System.out.println(connection);
+    }
+
+    @Test
+    public void testTx(){
+        Admin admin = new Admin(null, "Zyj", "123123", "张玉洁", "zyj@qq.com", null);
+        adminService.saveAdmin(admin);
     }
 }
