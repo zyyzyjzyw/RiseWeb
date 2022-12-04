@@ -70,6 +70,12 @@
   <sql id="Base_Column_List" >
     id, login_acct, user_pswd, user_name, email, create_time
   </sql>
+  <select id="selectAdminByKeyword" resultMap="BaseResultMap">
+    select id, login_acct, user_pswd, user_name, email, create_time
+    from t_admin
+    where user_name like concat("%",#{keyword},"%")
+    order by create_time desc
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tedu.java.entity.AdminExample" >
     select
     <if test="distinct" >

@@ -3,11 +3,13 @@ package com.tedu.java;
 import com.tedu.java.entity.Admin;
 import com.tedu.java.mapper.AdminMapper;
 import com.tedu.java.service.api.AdminService;
+import com.tedu.java.util.CrowMd5Utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,6 +35,21 @@ public class CrowdTest {
 
     @Autowired
     private AdminService adminService;
+
+
+    @Test
+    public void test(){
+        for(int i=0;i<238;i++){
+            adminMapper.insert(new Admin(null,"loginAcct"+i,"userPwd"+i,"userName"+i,"email"+i+"qq.com",null));
+        }
+    }
+
+    @Test
+    public void testMd5(){
+        String str = "123123";
+        String s = CrowMd5Utils.md5(str);
+        System.out.println(s);
+    }
     @Test
     public void logTest(){
         //1.获取Logger对象,这里传入的Class对象就是当前打印日志的类
@@ -70,5 +87,13 @@ public class CrowdTest {
     public void testTx(){
         Admin admin = new Admin(null, "Zyj", "123123", "张玉洁", "zyj@qq.com", null);
         adminService.saveAdmin(admin);
+    }
+
+    @Test
+    public void testSecurity(){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String pwd ="123456";
+        String encode = encoder.encode(pwd);
+        System.out.println(encode);
     }
 }
